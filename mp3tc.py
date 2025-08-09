@@ -14,7 +14,7 @@ def transcode(input_name: str, output_name: str):
             FFmpeg()
             .input(input_name)
             .output(
-                output_name, {"codec:a": "libmp3zlame", "q:a": "0"}, preset="veryslow"
+                output_name, {"codec:a": "libmp3lame", "q:a": "0"}, preset="veryslow"
             )
         )
 
@@ -22,7 +22,7 @@ def transcode(input_name: str, output_name: str):
     except errors.FFmpegUnsupportedCodec:
         print("Invalid encoder, is lame installed?")
         return
-        
+
     return
 
 
