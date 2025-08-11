@@ -1,6 +1,6 @@
 import sys
 import pathlib
-from ffmpeg import FFmpeg, errors
+from ffmpeg import FFmpeg 
 
 
 def clean_name(input_name: str) -> str:
@@ -23,10 +23,18 @@ def transcode(input_name: str, output_name: str):
         ffmpeg.execute()
         print("Done")
 
-    except errors.FFmpegUnsupportedCodec:
+    except ffmpeg.errors.FFmpegUnsupportedCodec:
         print("Invalid encoder, is lame installed?")
         return
+        
+    except ffmpeg.Error as ex:
+        print(f"FFmpeg error: {ex}")
+        return
 
+    except Exception as ex:
+        print(f"An error has occurred: {ex}")
+        return
+    
     return
 
 
