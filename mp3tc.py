@@ -1,4 +1,5 @@
 import sys
+import pathlib
 from ffmpeg import FFmpeg, errors
 
 
@@ -26,16 +27,16 @@ def transcode(input_name: str, output_name: str):
     return
 
 
+def get_flac_files() -> list:
+    flacs = pathlib.Path(".").glob("*.flac")
+    file_names = [file.name for file in flacs]
+    return file_names
+
+
 def main():
-    try:
-        file_name = sys.argv[1]
-    except IndexError:
-        print("Please enter a file name.")
-        return
-
-    output_name: str = clean_name(file_name)
-
-    transcode(file_name, output_name)
+    for file_name in get_flac_files():
+        output_name = clean_name(file_name)
+        transcode(file_name, output_name)
 
 
 if __name__ == "__main__":
