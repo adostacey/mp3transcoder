@@ -19,7 +19,10 @@ def transcode(input_name: str, output_name: str):
             )
         )
 
+        print(f"Converting: {input_name}")
         ffmpeg.execute()
+        print("Done")
+
     except errors.FFmpegUnsupportedCodec:
         print("Invalid encoder, is lame installed?")
         return
