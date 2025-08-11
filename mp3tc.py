@@ -2,7 +2,7 @@
 
 import sys
 import pathlib
-from ffmpeg import FFmpeg 
+from ffmpeg import FFmpeg, errors
 
 
 def clean_name(input_name: str) -> str:
@@ -19,24 +19,22 @@ def transcode(input_name: str, output_name: str):
             .output(
                 output_name, {"codec:a": "libmp3lame", "q:a": "0"}, preset="veryslow"
             )
+            .option("n")
         )
-
-        print(f"Converting: {input_name}")
         ffmpeg.execute()
-        print("Done")
 
-    except ffmpeg.errors.FFmpegUnsupportedCodec:
+    except errors.FFmpegUnsupportedCodec:
         print("Invalid encoder, is lame installed?")
         return
-        
-    except ffmpeg.Error as ex:
+
+    except errors.FFmpegError as ex:
         print(f"FFmpeg error: {ex}")
         return
 
     except Exception as ex:
         print(f"An error has occurred: {ex}")
         return
-    
+
     return
 
 
@@ -47,7 +45,11 @@ def get_flac_files() -> list:
 
 
 def main():
-    for file_name in get_flac_files():
+    file_names: list[str] = get_flac_files()
+    file_count: int = len(file_names)
+    progress_count:int = 1
+    print(f"Converting {file_count} files\n")
+    for file_name in file_names:
         output_name = clean_name(file_name)
         transcode(file_name, output_name)
 
